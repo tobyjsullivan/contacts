@@ -2,6 +2,8 @@
 
 class SiteController extends Controller
 {
+	public $layout = 'contacts';
+	
 	/**
 	 * Declares class-based actions.
 	 */
