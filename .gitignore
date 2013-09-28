@@ -1,4 +1,6 @@
 .DS_Store
 .vagrant*
-runtime/*
-!runtime/.empty
+/src/protected/runtime/*
+!/src/protected/runtime/.empty
+/src/assets/*
+!/src/assets/.empty
