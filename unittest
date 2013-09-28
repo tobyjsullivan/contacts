@@ -1,3 +1,4 @@
 #!/bin/sh
 cd vagrant
+vagrant up
 vagrant ssh -c "phpunit -c /var/www/protected/tests/phpunit.xml /var/www/protected/tests/"
