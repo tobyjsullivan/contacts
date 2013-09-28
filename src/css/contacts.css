@@ -1,0 +1,25 @@
+@CHARSET "UTF-8";
+
+html, body {
+	font-size: 24px;
+}
+
+.header-wrapper {
+	background-color: #d7d7d7;
+	margin-bottom: 10px;
+}
+
+h1.header {
+	font-size: 72px;
+	margin-top: 0px;
+	font-style: italic;
+}
+
+div.content {
+	min-height: 400px;
+}
+
+.footer {
+	font-size: 14px;
+	opacity: 0.75;
+}

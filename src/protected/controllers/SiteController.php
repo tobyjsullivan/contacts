@@ -33,6 +33,13 @@ class SiteController extends Controller
 		// using the default layout 'protected/views/layouts/main.php'
 		$this->render('index');
 	}
+	
+	/**
+	 * This is the action to display the user's main contact list
+	 */
+	public function actionDashboard() {
+		$this->render('dashboard');
+	}
 
 	/**
 	 * This is the action to handle external exceptions.
