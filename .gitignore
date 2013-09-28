@@ -4,3 +4,7 @@
 !/src/protected/runtime/.empty
 /src/assets/*
 !/src/assets/.empty
+.buildpath
+.project
+.settings
+*.swp
