@@ -1,0 +1,6 @@
+[submodule "vagrant/chef/cookbooks/phpunit"]
+	path = vagrant/chef/cookbooks/phpunit
+	url = https://github.com/tobyjsullivan/chef-phpunit.git
+[submodule "vagrant/chef/cookbooks/memcached"]
+	path = vagrant/chef/cookbooks/memcached
+	url = https://github.com/opscode-cookbooks/memcached.git
