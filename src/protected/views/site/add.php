@@ -3,7 +3,6 @@
 /* @var $model ContactForm */
 /* @var $form CActiveForm  */
 
-$this->pageTitle="New Contact";
 ?>
 
 <div class="row">
@@ -22,25 +21,28 @@ $this->pageTitle="New Contact";
 		<?php echo $form->textField($model,'name', array('class' => 'form-control')); ?>
 		<?php echo $form->error($model,'name'); ?>
 		<p class="hint">
-			Hint: This field is required.
+			This field is required.
 		</p>
 	</div>
 
 	<div class="form-group">
 		<?php echo $form->labelEx($model,'phone'); ?>
-		<?php echo $form->passwordField($model,'phone', array('class' => 'form-control')); ?>
+		<?php echo $form->textField($model,'phone', array('class' => 'form-control')); ?>
 		<?php echo $form->error($model,'phone'); ?>
 	</div>
 
 	
 	<div class="form-group">
 		<?php echo $form->labelEx($model,'twitter'); ?>
-		<?php echo $form->passwordField($model,'twitter', array('class' => 'form-control')); ?>
+		<div class="input-group">
+	  		<span class="input-group-addon">@</span>
+			<?php echo $form->textField($model,'twitter', array('class' => 'form-control')); ?>
+		</div>
 		<?php echo $form->error($model,'twitter'); ?>
 	</div>
 
 	<div class="form-group">
-		<?php echo CHtml::submitButton('Add Contact', array('class' => 'btn btn-primary form-control')); ?>
+		<?php echo CHtml::submitButton($this->pageTitle, array('class' => 'btn btn-primary btn-lg form-control input-lg')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

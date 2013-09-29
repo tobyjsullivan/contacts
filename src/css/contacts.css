@@ -1,7 +1,7 @@
 @CHARSET "UTF-8";
 
 html, body {
-	font-size: 24px;
+	/* font-size: 24px; */
 }
 
 .header-wrapper {
@@ -17,6 +17,11 @@ h1.header {
 
 div.content {
 	min-height: 400px;
+}
+
+.contact {
+	border-bottom: 1px solid #c7c7c7;
+	font-size: 48px;
 }
 
 .footer {

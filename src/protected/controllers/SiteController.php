@@ -4,6 +4,8 @@ class SiteController extends Controller
 {
 	public $layout = 'contacts';
 	
+	protected $backDestination = null;
+	
 	/**
 	 * Declares class-based actions.
 	 */
@@ -42,11 +44,32 @@ class SiteController extends Controller
 	}
 	
 	/**
-	 * This is the action to display the Add-Contact form
+	 * This is the action to display the AddContact form
 	 */
 	public function actionAdd() {
+
+		$this->pageTitle="New Contact";
+		
 		$model=new ContactForm;
 		$this->render('add', array('model' => $model));
+	}
+	
+	/**
+	 * This is the action to display the EditContact form
+	 */
+	public function actionEdit() {
+
+		$this->pageTitle="Edit Contact";
+		
+		$model=new ContactForm;
+		$this->render('add', array('model' => $model));
+	}
+	
+	/**
+	 * This is the action to display a contact's extended details
+	 */
+	public function actionView() {
+		$this->render('view');
 	}
 
 	/**
