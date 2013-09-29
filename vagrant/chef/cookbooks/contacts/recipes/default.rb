@@ -10,13 +10,13 @@ include_recipe "mysql::client"
 include_recipe "mysql::server"
 
 execute "create_databases" do
-	command "mysql -u root --password=#{node['mysql']['server_root_password']} << /var/sql/dbs_1.00.sql"
+	command "mysql -u root --password=#{node['mysql']['server_root_password']} < /var/sql/dbs_1.00.sql"
 end
 
 execute "populate_database" do
-	command "mysql -u root --password=#{node['mysql']['server_root_password']} contacts << /var/sql/schema_1.00.sql"
+	command "mysql -u root --password=#{node['mysql']['server_root_password']} contacts < /var/sql/schema_1.00.sql"
 end
 
 execute "populate_test_database" do
-	command "mysql -u root --password=#{node['mysql']['server_root_password']} contacts_test << /var/sql/schema_1.00.sql"
+	command "mysql -u root --password=#{node['mysql']['server_root_password']} contacts_test < /var/sql/schema_1.00.sql"
 end
