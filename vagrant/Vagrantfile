@@ -36,6 +36,7 @@ Vagrant::Config.run do |config|
   # folder, and the third is the path on the host to the actual folder.
   # You'll probably want to modify the host target
   config.vm.share_folder "www", "/var/www", "../src", :mount_options => ["dmode=777","fmode=777"]
+  config.vm.share_folder "sql", "/var/sql", "../sql"
 
   # Enable provisioning with chef solo, specifying a cookbooks path, roles
   # path, and data_bags path (all relative to this Vagrantfile), and adding 
@@ -54,6 +55,7 @@ Vagrant::Config.run do |config|
     chef.add_recipe("php::module_memcache")
     chef.add_recipe("apache2::mod_php5")
     chef.add_recipe("vagrant::a2ensite_default")
+    chef.add_recipe("contacts")
     chef.json = {
       :mysql => {
         :server_root_password => 'root',
