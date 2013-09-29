@@ -50,6 +50,7 @@ Vagrant::Config.run do |config|
     chef.add_recipe("php")
     chef.add_recipe("memcached")
     chef.add_recipe("phpunit")
+    chef.add_recipe("composer")
     chef.add_recipe("mysql::server")
     chef.add_recipe("php::module_mysql")
     chef.add_recipe("php::module_memcache")
@@ -61,6 +62,9 @@ Vagrant::Config.run do |config|
         :server_root_password => 'root',
         :server_debian_password => 'password',
         :server_repl_password => 'password'
+      },
+      :composer => {
+        :install_globally => true
       }
     }
   end

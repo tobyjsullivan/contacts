@@ -2,6 +2,8 @@
 .vagrant*
 /src/protected/runtime/*
 !/src/protected/runtime/.empty
+/src/lib/composer.lock
+/src/lib/vendor/*
 /src/assets/*
 !/src/assets/.empty
 .buildpath

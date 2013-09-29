@@ -20,3 +20,7 @@ end
 execute "populate_test_database" do
 	command "mysql -u root --password=#{node['mysql']['server_root_password']} contacts_test < /var/sql/schema_1.00.sql"
 end
+
+execute "install_composer" do
+	command "composer install -d /var/www/lib"
+end
