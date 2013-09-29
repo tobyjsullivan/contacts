@@ -58,8 +58,10 @@ return array(
 			'connectionString' => 'mysql:host=localhost;dbname=contacts',
 			'emulatePrepare' => true,
 			'username' => 'root',
-			'password' => '',
+			'password' => 'root',
 			'charset' => 'utf8',
+			// turn on schema caching to improve performance
+			// 'schemaCachingDuration'=>3600,
 		),
 		
 		'errorHandler'=>array(
