@@ -1,5 +1,6 @@
 .DS_Store
 .vagrant*
+/src/protected/config/main.php
 /src/protected/runtime/*
 !/src/protected/runtime/.empty
 /src/lib/composer.lock
