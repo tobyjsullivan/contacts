@@ -4,10 +4,7 @@
 /* @var $form CActiveForm  */
 
 ?>
-
-<div class="row">
-	<div class="col-sm-12 col-md-offset-3 col-md-6">
-		<?php $form=$this->beginWidget('CActiveForm', array(
+<?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'add-form',
 	'htmlOptions' => array('class' => 'form'),
 	'enableClientValidation'=>true,
@@ -46,5 +43,3 @@
 	</div>
 
 <?php $this->endWidget(); ?>
-	</div>
-</div>

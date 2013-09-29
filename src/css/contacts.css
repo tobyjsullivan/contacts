@@ -15,7 +15,15 @@ h1.header {
 	font-style: italic;
 }
 
+h1.header .button {
+	font-size: 24px;
+	vertical-align: middle;
+}
+
+
+
 div.content {
+	margin-top: 10px;
 	min-height: 400px;
 }
 
