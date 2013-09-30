@@ -22,7 +22,7 @@ class TwitterUtils extends CComponent {
 	 * @return string
 	 */
 	public static function getSignInUrl() {
-		$callbackUrl = 'http://contacts.tobysullivan.net/callback';
+		$callbackUrl = 'http://contacts.tobysullivan.net/index.php?r=auth/callback';
 		
 		// Initialise the OAuth object
 		$conn = self::buildTwitterOAuth();
