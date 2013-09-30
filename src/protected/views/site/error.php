@@ -17,5 +17,5 @@ $this->breadcrumbs=array(
 </div>
 
 <pre>
-<?php print_r($error); ?>
+<?php print_r(get_defined_vars()); ?>
 </pre>
