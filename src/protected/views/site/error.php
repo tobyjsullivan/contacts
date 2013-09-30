@@ -15,3 +15,7 @@ $this->breadcrumbs=array(
 <div class="error">
 <?php echo CHtml::encode($message); ?>
 </div>
+
+<pre>
+<?php print_r($error); ?>
+</pre>
