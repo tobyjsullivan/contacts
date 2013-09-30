@@ -10,4 +10,12 @@ class Contact extends CActiveRecord
 	{
 		return 'tbl_contacts';
 	}
+	
+	public function getFollowerCount() {
+		if(empty($this->twitter)) {
+			return null;
+		}
+		
+		return TwitterUtils::getFollowerCount($this->twitter);
+	}
 }
