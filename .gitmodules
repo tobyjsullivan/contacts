@@ -4,6 +4,6 @@
 [submodule "vagrant/chef/cookbooks/memcached"]
 	path = vagrant/chef/cookbooks/memcached
 	url = https://github.com/opscode-cookbooks/memcached.git
-[submodule "vagrant/chef/cookbooks/php-extra"]
-	path = vagrant/chef/cookbooks/php-extra
+[submodule "vagrant/chef/cookbooks/chef-php-extra"]
+	path = vagrant/chef/cookbooks/chef-php-extra
 	url = https://github.com/inviqa/chef-php-extra.git
