@@ -25,10 +25,10 @@
 						</ul>
 						<ul class="nav nav-tabs nav-justified visible-xs">
 							<li>
-							<?php echo CHtml::link('<span class="glyphicon glyphicon-book"></span> Contact List', array('/site/dashboard')); ?>
+							<?php echo CHtml::link('<span class="glyphicon glyphicon-log-out"></span> Sign Out', array('/auth/signout')); ?>
 							</li>
 							<li>
-							<?php echo CHtml::link('<span class="glyphicon glyphicon-log-out"></span> Sign Out', array('/auth/signout')); ?>
+							<?php echo CHtml::link('<span class="glyphicon glyphicon-book"></span> Contact List', array('/site/dashboard')); ?>
 							</li>
 						</ul>
 					</div>
