@@ -5,7 +5,14 @@
  *
  */
 class ContactForm extends CFormModel {
-	public $name, $phone, $twitter;
+	public $name;
+	public $phone;
+	public $twitter;
 	
-	
+	public function rules()
+	{
+		return array(
+				array('name', 'required'),
+		);
+	}
 }

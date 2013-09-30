@@ -2,6 +2,8 @@
 /* @var $this SiteController */
 /* @var $error array */
 
+$this->showNav = false;
+
 $this->pageTitle=Yii::app()->name . ' - Error';
 $this->breadcrumbs=array(
 	'Error',

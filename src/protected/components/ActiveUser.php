@@ -1,5 +1,5 @@
 <?php
-class ActiveUser {
+class ActiveUser extends CComponent {
 	const COOKIE_NAME = "active_user";
 	private static $activeUser = null;
 	/** 

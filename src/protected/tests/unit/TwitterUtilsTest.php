@@ -8,4 +8,21 @@ class TwitterUtilsTest extends CTestCase {
 		
 		$this->assertEquals($expected_result, $retVal);
 	}
+	
+	public function testGetFollowerCountForBadHandle() {
+		$twitter_handle = "thishandleiswaytoolongrightguys";
+		
+		$retVal = TwitterUtils::getFollowerCount($twitter_handle);
+		
+		$this->assertEquals(0, $retVal);
+	}
+	
+	public function testGetFollowerCountForProtected() {
+		$twitter_handle = "TestUse26541783";
+		
+		$retVal = TwitterUtils::getFollowerCount($twitter_handle);
+		
+		$this->assertEquals(0, $retVal);
+	}
+	
 }

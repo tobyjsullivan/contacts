@@ -40,17 +40,60 @@ class SiteController extends Controller
 	 * This is the action to display the user's main contact list
 	 */
 	public function actionDashboard() {
-		$this->render('dashboard');
+		$user_id = $this->requireActiveUser();
+		if($user_id == null) {
+			return;
+		}
+		
+		$contacts = Contact::model()->findAll('owner_id=:owner_id', array(':owner_id'=>$user_id));
+		
+		$this->render('dashboard', array('contacts'=>$contacts));
+	}
+	
+	/**
+	 * This method handles fetching the active user id or redirecting to the
+	 * index page if one is not set.
+	 */
+	private function requireActiveUser() {
+		$user_id = ActiveUser::getActiveUser();
+		// If no active user exists, redirect to index
+		if($user_id == null) {
+			$this->redirect(array('/site/index'));
+			return null;
+		}
+		
+		return $user_id;
 	}
 	
 	/**
 	 * This is the action to display the AddContact form
 	 */
 	public function actionAdd() {
+		$model=new ContactForm;
+		if(isset($_POST['ContactForm'])) {
+			
+			$model->attributes=$_POST['ContactForm'];
+			
+			if($model->validate()) {
+				$user_id = $this->requireActiveUser();
+				if($user_id == null) {
+					return;
+				}
+			
+				$contact = new Contact;
+				$contact->owner_id = $user_id;
+				$contact->name = $_POST['ContactForm']['name'];
+				$contact->phone = $_POST['ContactForm']['phone'];
+				$contact->twitter = $_POST['ContactForm']['twitter'];
+				$contact->save();
 
+				$this->redirect(array('/site/dashboard'));
+			}
+		}
+		
+		
 		$this->pageTitle="New Contact";
 		
-		$model=new ContactForm;
 		$this->render('add', array('model' => $model));
 	}
 	
@@ -68,8 +111,30 @@ class SiteController extends Controller
 	/**
 	 * This is the action to display a contact's extended details
 	 */
-	public function actionView() {
-		$this->render('view');
+	public function actionView($contact_id) {
+		$user_id = ActiveUser::getActiveUser();
+		// If no active user exists, redirect to index
+		if($user_id == null) {
+			$this->redirect(array('/site/index'));
+			return null;
+		}
+		
+		// Find the contact that matches the contact id AND is owned by the current user
+		$contact = Contact::model()->find('contact_id=:contact_id AND owner_id=:owner_id', array(
+				':contact_id'=>$contact_id,
+				':owner_id'=>$user_id
+				));
+		
+		if($contact == null) {
+			$this->redirect(array('/site/dashboard'));
+		}
+		
+		$followerCount = null;
+		if(!empty($contact->twitter)) {
+			$followerCount = TwitterUtils::getFollowerCount($contact->twitter);
+		}
+		
+		$this->render('view', array('contact'=>$contact, 'followerCount'=>$followerCount));
 	}
 
 	/**

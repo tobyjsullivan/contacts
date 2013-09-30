@@ -33,4 +33,22 @@ class ContactFormTest extends CTestCase {
 		
 		$this->assertEquals("@joshie", $contactForm->twitter);
 	}
+	
+	public function testValidateNoName() {
+		$form = new ContactForm();
+		
+		$form->name = "";
+		
+		$res = $form->validate();
+		$this->assertFalse($res);
+	}
+	
+	public function testValidateWithName() {
+		$form = new ContactForm();
+		
+		$form->name = "Bobby Shell";
+		
+		$res = $form->validate();
+		$this->assertTrue($res);
+	}
 }

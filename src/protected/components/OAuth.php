@@ -3,9 +3,9 @@
 
 /* Generic exception class
  */
-  class OAuthException extends Exception {
-    // pass
-  }
+class OAuthException extends Exception {
+	// pass
+}
 
 class OAuthConsumer {
   public $key;
@@ -21,6 +21,7 @@ class OAuthConsumer {
     return "OAuthConsumer[key=$this->key,secret=$this->secret]";
   }
 }
+
 
 class OAuthToken {
   // access tokens and request tokens
