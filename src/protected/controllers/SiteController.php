@@ -2,7 +2,6 @@
 
 class SiteController extends Controller
 {
-	public $layout = 'contacts';
 	
 	protected $showNav = true;
 	
