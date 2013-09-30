@@ -1,6 +1,6 @@
 <?php
 class ActiveUser {
-	private static final $COOKIE_NAME = "active_user";
+	const COOKIE_NAME = "active_user";
 	private static $activeUser = null;
 	/** 
 	 * The $hasBeenCleared var helps us differentiate between a deleted active 
@@ -12,7 +12,7 @@ class ActiveUser {
 	public static function setActiveUser($user_id) {
 		self::$activeUser = $user_id;
 		self::$hasBeenCleared = true;
-		Yii::app()->request->cookies[self::$COOKIE_NAME] = new CHttpCookie(self::$COOKIE_NAME, self::encrypt($value));
+		Yii::app()->request->cookies[self::COOKIE_NAME] = new CHttpCookie(self::COOKIE_NAME, self::encrypt($user_id));
 	}
 	
 	public static function getActiveUser() {
@@ -22,8 +22,8 @@ class ActiveUser {
 		} 
 		
 		// Otherwise try reading the active user from the user's cookies
-		if(isset(Yii::app()->request->cookies[self::$COOKIE_NAME])) {
-			self::$activeUser = self::decrypt(Yii::app()->request->cookies[self::$COOKIE_NAME]->value);
+		if(isset(Yii::app()->request->cookies[self::COOKIE_NAME])) {
+			self::$activeUser = self::decrypt(Yii::app()->request->cookies[self::COOKIE_NAME]->value);
 		}
 		
 		// Return the found user or null
@@ -33,7 +33,7 @@ class ActiveUser {
 	public static function clearActiveUser() {
 		self::$activeUser = null;
 		self::$hasBeenCleared = true;
-		unset(Yii::app()->request->cookies[self::$COOKIE_NAME]);
+		unset(Yii::app()->request->cookies[self::COOKIE_NAME]);
 	}
 	
 	private static function encrypt($value) {

@@ -7,5 +7,5 @@ $this->showNav = false;
 ?>
 
 <div class="text-center">
-	<p><?php echo CHtml::link('Sign in with Twitter', array('/site/dashboard'), array('class' => 'btn btn-primary')); ?></p>
+	<p><?php echo CHtml::link('Sign in with Twitter', array('/auth/SignInWithTwitter'), array('class' => 'btn btn-primary')); ?></p>
 </div>

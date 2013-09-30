@@ -1,5 +1,19 @@
 <?php
 class AuthController extends Controller {
+	
+	/**
+	 * This action redirects the user to twitter to sign in. In the case
+	 * we are in debug mode, it will simply redirect the user to the debug
+	 * callback.
+	 */
+	public function actionSignInWithTwitter() {
+		if(defined('YII_DEBUG')) {
+			$this->redirect(array('/auth/DebugCallback'));
+		} else {
+			// TODO
+		}
+	}
+	
 	/**
 	 * This method handles the callback from Sign In With Twitter.
 	 */
@@ -21,5 +35,13 @@ class AuthController extends Controller {
 		$user->save();
 		
 		ActiveUser::setActiveUser($user->user_id);
+		
+		$this->redirect(array('/site/dashboard'));
+	}
+	
+	public function actionSignOut() {
+		ActiveUser::clearActiveUser();
+		
+		$this->redirect(array('/site/index'));
 	}
 }

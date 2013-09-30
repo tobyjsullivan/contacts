@@ -25,7 +25,7 @@
 							<?php echo CHtml::link('<span class="glyphicon glyphicon-book"></span> Contact List', array('/site/dashboard')); ?>
 							</li>
 							<li>
-							<?php echo CHtml::link('Sign Out <span class="glyphicon glyphicon-log-out"></span>', array('/site/index')); ?>
+							<?php echo CHtml::link('Sign Out <span class="glyphicon glyphicon-log-out"></span>', array('/auth/signout')); ?>
 							</li>
 						</ul>
 					</div>
