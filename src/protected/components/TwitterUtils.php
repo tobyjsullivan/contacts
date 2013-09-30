@@ -31,8 +31,10 @@ class TwitterUtils extends CComponent {
 		$temp_creds = $conn->getRequestToken($callbackUrl);
 
 		// Store temp credentials for use in callback
-		$_SESSION['oauth_token'] = $temp_creds['oauth_token'];
-		$_SESSION['oauth_token_secret'] = $temp_creds['oauth_token_secret'];
+		$session = new CHttpSession;
+		$session->open();
+		$session['oauth_token'] = $temp_creds['oauth_token'];
+		$session['oauth_token_secret'] = $temp_creds['oauth_token_secret'];
 		
 		// Get the callback URL
 		$redirectUrl = $conn->getAuthorizeURL($temp_creds);
@@ -44,8 +46,11 @@ class TwitterUtils extends CComponent {
 	 * This method is to be run after the twitter callback
 	 */
 	public static function getLongTermCredentials() {
-		$temp_auth_token = $_SESSION['oauth_token'];
-		$temp_auth_token_secret = $_SESSION['oauth_token_secret'];
+		// Read temp credentials that were set previously in getSignInUrl()
+		$session = new CHttpSession;
+		$session->open();
+		$temp_auth_token = $session['oauth_token'];
+		$temp_auth_token_secret = $session['oauth_token_secret'];
 		
 		$temp_conn = self::buildTwitterOAuth($temp_auth_token, $temp_auth_token_secret);
 		
