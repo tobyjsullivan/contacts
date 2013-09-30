@@ -19,9 +19,10 @@ Installation
 When cloning the repo, be sure to use --recursive if you intend to use vagrant. This should get you the chef 
 recipes that are submodules.
 
-   git clone https://github.com/tobyjsullivan/contacts.git --recursive
+    git clone https://github.com/tobyjsullivan/contacts.git --recursive
    
 Following that, just setup the default configuration with this command.
+
 	./set-config-default.sh
 
 Vagrant
