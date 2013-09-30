@@ -7,7 +7,7 @@ class AuthController extends Controller {
 	 * callback.
 	 */
 	public function actionSignInWithTwitter() {
-		if(defined('YII_DEBUG')) {
+		if(YII_DEBUG) {
 			$this->redirect(array('/auth/DebugCallback'));
 		} else {
 			// Get the twitter URL for redirect

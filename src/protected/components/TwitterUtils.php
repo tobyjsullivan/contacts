@@ -68,7 +68,7 @@ class TwitterUtils extends CComponent {
 		}
 
 		$cacheKey = "creds:".$auth_token.$auth_token_secret;
-		if(!$force_check && !defined('YII_DEBUG')) {
+		if(!$force_check && !YII_DEBUG) {
 			if($twitter_id = CacheManager::getInstance()->get($cacheKey)) {
 				return $twitter_id;
 			}
@@ -100,7 +100,7 @@ class TwitterUtils extends CComponent {
 		$twitterHandle = strtolower($twitterHandle);
 		
 		$cacheKey = "follower_count:".$twitterHandle;
-		if(!defined('YII_DEBUG')) {
+		if(!YII_DEBUG) {
 			if($count = CacheManager::getInstance()->get($cacheKey)) {
 				return $count;
 			}
@@ -112,7 +112,7 @@ class TwitterUtils extends CComponent {
 		$accessTokenSecret = 'kaoX8S03GVwqNRLmH0YVzJE5gc1DMo3XPU1Tn4J1o';
 		
 		// Load from user data
-		if(!defined('YII_DEBUG')) {
+		if(!YII_DEBUG) {
 			$user_id = ActiveUser::getActiveUser();
 			if($user_id != null) {
 				$user = User::model()->find('user_id=:user_id', array(':user_id'=>$user_id));
