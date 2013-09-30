@@ -2,8 +2,8 @@
 
 class ContactTest extends CDbTestCase {
 	public $fixtures = array(
-			'users' => ':tbl_users',
-			'contacts' => ':tbl_contacts'
+			'users' => 'User',
+			'contacts' => 'Contact'
 		);
 	
 	public function testCreateNewWithNameOnly() {

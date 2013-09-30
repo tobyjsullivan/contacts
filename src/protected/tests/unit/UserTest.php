@@ -2,7 +2,7 @@
 
 class UserTest extends CDbTestCase {
 	public $fixtures = array(
-			'users' => ':tbl_users'
+			'users' => 'User'
 		);
 	
 	public function testCreateNew() {
@@ -19,6 +19,18 @@ class UserTest extends CDbTestCase {
 		
 		// Confirm same user id is found
 		$this->assertEquals($user_id, $foundUser->user_id);
+	}
+	
+	public function testSetAuthToken() {
+		$user = $this->users('sample1');
+		$user->auth_token = '1234567-3MlkNH3ChTxzf9U6wTDADcAO3sgtcgiObbEKhThg4';
+		$user->auth_token_secret = 'cndX8S03GVwqNRLmH0YVzJE5gc1DMo3XPU1Tn4J1o';
+		$user->save();
+
+		$foundUser = User::model()->find('auth_token=:auth_token', array(':auth_token'=>"1234567-3MlkNH3ChTxzf9U6wTDADcAO3sgtcgiObbEKhThg4"));
+		
+		$this->assertNotNull($foundUser);
+		$this->assertEquals('cndX8S03GVwqNRLmH0YVzJE5gc1DMo3XPU1Tn4J1o', $foundUser->auth_token_secret);
 	}
 	
 	public function testFindOrCreateWithExisting() {

@@ -1,6 +1,8 @@
 CREATE TABLE IF NOT EXISTS `tbl_users` (
 	`user_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	`twitter_id` BIGINT(14) UNSIGNED NOT NULL,
+	`auth_token` VARCHAR(60),
+	`auth_token_secret` VARCHAR(42),
 	PRIMARY KEY (`user_id`),
 	UNIQUE KEY (`twitter_id`)
 );
