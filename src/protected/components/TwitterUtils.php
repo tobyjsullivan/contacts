@@ -4,18 +4,28 @@ require_once('CacheManager.php');
 require_once('ActiveUser.php');
 
 class TwitterUtils extends CComponent {
+	
+	/**
+	 * A simple helper method to help with the repetative task of building the oauth object
+	 * @param string $auth_token
+	 * @param string $auth_token_secret
+	 */
+	private static function buildTwitterOAuth($auth_token = NULL, $auth_token_secret = NULL) {
+		$consumer_key = Yii::app()->params['twitterConsumerKey'];
+		$consumer_secret = Yii::app()->params['twitterConsumerSecret'];
+		
+		return new TwitterOAuth($consumer_key, $consumer_secret, $auth_token, $auth_token_secret);
+	}
+	
 	/**
 	 * This method produces a Twitter API URL that we can redirect users to for sign in.
 	 * @return string
 	 */
 	public static function getSignInUrl() {
-		$consumerKey = Yii::app()->params['twitterConsumerKey'];
-		$consumerSecret = Yii::app()->params['twitterConsumerSecret'];
-		
 		$callbackUrl = 'http://contacts.tobysullivan.net/callback';
 		
 		// Initialise the OAuth object
-		$conn = new TwitterOAuth($consumerKey, $consumerSecret);
+		$conn = self::buildTwitterOAuth();
 		
 		// Get temporary credentials for authorisation
 		$temp_creds = $conn->getRequestToken($callbackUrl);
@@ -28,6 +38,55 @@ class TwitterUtils extends CComponent {
 		$redirectUrl = $conn->getAuthorizeURL($temp_creds);
 		
 		return $redirectUrl;
+	}
+	
+	/**
+	 * This method is to be run after the twitter callback
+	 */
+	public static function getLongTermCredentials() {
+		$temp_auth_token = $_SESSION['oauth_token'];
+		$temp_auth_token_secret = $_SESSION['oauth_token_secret'];
+		
+		$temp_conn = self::buildTwitterOAuth($temp_auth_token, $temp_auth_token_secret);
+		
+		$token_creds = $temp_conn->getAccessToken($_REQUEST['oauth_verifier']);
+		
+		// Return the token credential array
+		return $token_creds;
+	}
+	
+	/**
+	 * This method takes a Twitter token/secret pair and determines if they are valid
+	 * @param string $auth_token
+	 * @param string $auth_token_secret
+	 * @param string $force_check This flag is used to bypass caching and hit the Twitter API every time
+	 * @return boolean
+	 */
+	public static function validateToken($auth_token, $auth_token_secret, $force_check = false) {
+		if(empty($auth_token) || empty($auth_token_secret)) {
+			return false;
+		}
+
+		$cacheKey = "creds:".$auth_token.$auth_token_secret;
+		if(!$force_check && !defined('YII_DEBUG')) {
+			if($twitter_id = CacheManager::getInstance()->get($cacheKey)) {
+				return $twitter_id;
+			}
+		}
+		
+		
+		$conn = self::buildTwitterOAuth($auth_token, $auth_token_secret);
+		
+		$account = $conn->get('account/verify_credentials');
+		
+		if(isset($account->error) || isset($account->errors)) {
+			return false;
+		}
+
+		// Cache valid creds for 8 hours
+		CacheManager::getInstance()->set($cacheKey, $account->id, 60 * 60 * 8);
+		
+		return $account->id;
 	}
 	
 	/**
@@ -47,10 +106,6 @@ class TwitterUtils extends CComponent {
 			}
 		}
 		
-		
-		$consumerKey = Yii::app()->params['twitterConsumerKey'];
-		$consumerSecret = Yii::app()->params['twitterConsumerSecret'];
-		
 		// User access tokens
 		// Defaults for debug mode
 		$accessToken = '93370723-3MlkNH3ChTxzf9U6wTDADcAO3sgtcgiObbEKhThg4';
@@ -68,7 +123,7 @@ class TwitterUtils extends CComponent {
 			}
 		}
 		
-		$conn = new TwitterOAuth($consumerKey, $consumerSecret, $accessToken, $accessTokenSecret);
+		$conn = self::buildTwitterOAuth($accessToken, $accessTokenSecret);
 		
 		$followers = $conn->get('followers/ids', array('screen_name' => $twitterHandle));
 		

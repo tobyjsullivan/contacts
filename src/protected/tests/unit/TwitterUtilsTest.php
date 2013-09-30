@@ -7,6 +7,15 @@ class TwitterUtilsTest extends CTestCase {
 		$this->assertStringStartsWith("https://", $url);
 	}
 	
+	public function testValidateToken_Invalid() {
+		$auth_token = "Gibberish";
+		$auth_token_secret = "BadSecret";
+		
+		$res = TwitterUtils::validateToken($auth_token, $auth_token_secret);
+		
+		$this->assertFalse($res);
+	}
+	
 	public function testGetFollowerCount() {
 		$twitter_handle = "TestUse57789104";
 		$expected_result = 2;

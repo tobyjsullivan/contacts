@@ -10,7 +10,10 @@ class AuthController extends Controller {
 		if(defined('YII_DEBUG')) {
 			$this->redirect(array('/auth/DebugCallback'));
 		} else {
-			// TODO
+			// Get the twitter URL for redirect
+			$redirect_url = TwitterUtils::getSignInUrl();
+			
+			$this->redirect($redirect_url);
 		}
 	}
 	
@@ -18,7 +21,27 @@ class AuthController extends Controller {
 	 * This method handles the callback from Sign In With Twitter.
 	 */
 	public function actionCallback() {
-		// TODO
+		// Turn the callback $_REQUEST data into credentials
+		$token_creds = TwitterUtils::getLongTermCredentials();
+		
+		// Validate tokens and get twitter_id
+		$twitter_id = TwitterUtils::validateToken($token_creds['auth_token'], $token_creds['auth_token_secret']);
+		
+		if(empty($twitter_id)) {
+			// Something went wrong
+			$this->redirect(array('/site/index'));
+		}
+		
+		$user = User::findOrCreate($twitter_id);
+		
+		// Set user tokens
+		$user->auth_token = $token_creds['auth_token'];
+		$user->auth_token_secret = $token_creds['auth_token_secret'];
+		$user->save();
+		
+		ActiveUser::setActiveUser($user->user_id);
+		
+		$this->redirect(array('/site/dashboard'));
 	}
 	
 	/**

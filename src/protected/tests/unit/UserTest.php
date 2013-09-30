@@ -47,6 +47,44 @@ class UserTest extends CDbTestCase {
 		$this->assertEquals($expected_user_id, $user->user_id);
 	}
 	
+	/**
+	 * This method tests the validation of unset twitter credentials
+	 */
+	public function testValidateTwitterToken_Unset() {
+		$user = $this->users('sample2');
+		$this->assertNull($user->auth_token);
+		
+		$res = $user->validateTwitterToken();
+		
+		$this->assertFalse($res);
+	}
+	
+	/**
+	 * This method tests the validation of set but invalid twitter credentials
+	 */
+	public function testValidateTwitterToken_Invalid() {
+		$user = $this->users('sample2');
+		$user->auth_token = "DefinitelyAnInvalidToken";
+		$user->auth_token_secret = "NotARealSecret";
+		$user->save();
+		
+		$res = $user->validateTwitterToken();
+		
+		$this->assertFalse($res);
+	}
+	
+	/**
+	 * This method tests the validation of valid twitter credentials
+	 */
+	public function testValidateTwitterToken_Valid() {
+		// If this test fails, ensure the sample user has valid tokens (defined in fixture).
+		$user = $this->users('sample3');
+		
+		$res = $user->validateTwitterToken();
+		
+		$this->assertTrue($res);
+	}
+	
 	public function testFindOrCreateWithNew() {
 		$twitter_id = rand(10000000, 90000000);
 		$user = User::findOrCreate($twitter_id);
