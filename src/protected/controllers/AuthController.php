@@ -26,7 +26,7 @@ class AuthController extends Controller {
 		$token_creds = TwitterUtils::getLongTermCredentials();
 		
 		// Validate tokens and get twitter_id
-		$twitter_id = TwitterUtils::validateToken($token_creds['auth_token'], $token_creds['auth_token_secret']);
+		$twitter_id = TwitterUtils::validateToken($token_creds['oauth_token'], $token_creds['oauth_token_secret']);
 		
 		if(empty($twitter_id)) {
 			// Something went wrong

@@ -10,12 +10,10 @@ $this->breadcrumbs=array(
 );
 ?>
 
+<?php error_log(print_r(get_defined_vars(), true)); ?>
+
 <h2>Error <?php echo $code; ?></h2>
 
 <div class="error">
 <?php echo CHtml::encode($message); ?>
 </div>
-
-<pre>
-<?php print_r(get_defined_vars()); ?>
-</pre>
