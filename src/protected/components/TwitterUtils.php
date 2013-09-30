@@ -44,6 +44,11 @@ class TwitterUtils extends CComponent {
 	 * This method is to be run after the twitter callback
 	 */
 	public static function getLongTermCredentials() {
+		if(!isset(Yii::app()->session['oauth_token']) || !isset(Yii::app()->session['oauth_token_secret']) ||
+				!isset($_REQUEST['oauth_verifier'])) {
+			return null;
+		}
+		
 		// Read temp credentials that were set previously in getSignInUrl()
 		$temp_auth_token = Yii::app()->session['oauth_token'];
 		$temp_auth_token_secret = Yii::app()->session['oauth_token_secret'];

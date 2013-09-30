@@ -25,6 +25,11 @@ class AuthController extends Controller {
 		// Turn the callback $_REQUEST data into credentials
 		$token_creds = TwitterUtils::getLongTermCredentials();
 		
+		// In the event the user cancels, etc.
+		if($token_creds == null) {
+			$this->redirect(array('/site/index'));
+		}
+		
 		// Validate tokens and get twitter_id
 		$twitter_id = TwitterUtils::validateToken($token_creds['oauth_token'], $token_creds['oauth_token_secret']);
 		
