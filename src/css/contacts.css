@@ -10,17 +10,10 @@ html, body {
 }
 
 h1.header {
-	font-size: 72px;
+	font-size: 42px;
 	margin-top: 0px;
 	font-style: italic;
 }
-
-h1.header .button {
-	font-size: 24px;
-	vertical-align: middle;
-}
-
-
 
 div.content {
 	margin-top: 10px;
