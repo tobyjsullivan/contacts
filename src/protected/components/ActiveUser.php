@@ -37,12 +37,15 @@ class ActiveUser extends CComponent {
 	}
 	
 	private static function encrypt($value) {
-		// TODO
-		return $value;
+		return Yii::app()->getSecurityManager()->encrypt($value);
 	}
 	
 	private static function decrypt($value) {
-		// TODO
-		return $value;
+		// Check for invalid input data (usually a result of changing encryption)
+		if(strlen($value) < 8) {
+			return null;
+		}
+		
+		return Yii::app()->getSecurityManager()->decrypt($value);
 	}
 }
