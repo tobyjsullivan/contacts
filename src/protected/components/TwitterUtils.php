@@ -31,10 +31,8 @@ class TwitterUtils extends CComponent {
 		$temp_creds = $conn->getRequestToken($callbackUrl);
 
 		// Store temp credentials for use in callback
-		$session = new CHttpSession;
-		$session->open();
-		$session['oauth_token'] = $temp_creds['oauth_token'];
-		$session['oauth_token_secret'] = $temp_creds['oauth_token_secret'];
+		Yii::app()->session['oauth_token'] = $temp_creds['oauth_token'];
+		Yii::app()->session['oauth_token_secret'] = $temp_creds['oauth_token_secret'];
 		
 		// Get the callback URL
 		$redirectUrl = $conn->getAuthorizeURL($temp_creds);
@@ -47,10 +45,8 @@ class TwitterUtils extends CComponent {
 	 */
 	public static function getLongTermCredentials() {
 		// Read temp credentials that were set previously in getSignInUrl()
-		$session = new CHttpSession;
-		$session->open();
-		$temp_auth_token = $session['oauth_token'];
-		$temp_auth_token_secret = $session['oauth_token_secret'];
+		$temp_auth_token = Yii::app()->session['oauth_token'];
+		$temp_auth_token_secret = Yii::app()->session['oauth_token_secret'];
 		
 		$temp_conn = self::buildTwitterOAuth($temp_auth_token, $temp_auth_token_secret);
 		
