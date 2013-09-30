@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS `tbl_users` (
 	`user_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-	`twitter_id` INT UNSIGNED NOT NULL,
+	`twitter_id` BIGINT(14) UNSIGNED NOT NULL,
 	PRIMARY KEY (`user_id`),
 	UNIQUE KEY (`twitter_id`)
 );

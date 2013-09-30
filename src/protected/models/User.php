@@ -10,4 +10,16 @@ class User extends CActiveRecord
 	{
 		return 'tbl_users';
 	}
+	
+	public static function findOrCreate($twitter_id) {
+		$user = self::model()->find('twitter_id=:twitter_id', array(':twitter_id'=>$twitter_id));
+		
+		if($user == null) {
+			$user = new User;
+			$user->twitter_id = $twitter_id;
+			$user->save();
+		}
+		
+		return $user;
+	} 
 }
