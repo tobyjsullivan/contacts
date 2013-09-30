@@ -84,7 +84,7 @@ class SiteController extends Controller
 				$contact->owner_id = $user_id;
 				$contact->name = $_POST['ContactForm']['name'];
 				$contact->phone = $_POST['ContactForm']['phone'];
-				$contact->twitter = $_POST['ContactForm']['twitter'];
+				$contact->twitter = trim($_POST['ContactForm']['twitter'], "@");
 				$contact->save();
 
 				$this->redirect(array('/site/dashboard'));
@@ -125,7 +125,7 @@ class SiteController extends Controller
 			if($model->validate()) {
 				$contact->name = $_POST['ContactForm']['name'];
 				$contact->phone = $_POST['ContactForm']['phone'];
-				$contact->twitter = $_POST['ContactForm']['twitter'];
+				$contact->twitter = trim($_POST['ContactForm']['twitter'], "@");
 				$contact->save();
 		
 				$this->redirect(array('/site/dashboard'));
