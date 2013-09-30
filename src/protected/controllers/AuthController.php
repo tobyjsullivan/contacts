@@ -7,11 +7,12 @@ class AuthController extends Controller {
 	 * callback.
 	 */
 	public function actionSignInWithTwitter() {
+		// Get the twitter URL for redirect
+		$redirect_url = TwitterUtils::getSignInUrl();
+			
 		if(YII_DEBUG) {
 			$this->redirect(array('/auth/DebugCallback'));
 		} else {
-			// Get the twitter URL for redirect
-			$redirect_url = TwitterUtils::getSignInUrl();
 			
 			$this->redirect($redirect_url);
 		}
@@ -35,8 +36,8 @@ class AuthController extends Controller {
 		$user = User::findOrCreate($twitter_id);
 		
 		// Set user tokens
-		$user->auth_token = $token_creds['auth_token'];
-		$user->auth_token_secret = $token_creds['auth_token_secret'];
+		$user->auth_token = $token_creds['oauth_token'];
+		$user->auth_token_secret = $token_creds['oauth_token_secret'];
 		$user->save();
 		
 		ActiveUser::setActiveUser($user->user_id);
