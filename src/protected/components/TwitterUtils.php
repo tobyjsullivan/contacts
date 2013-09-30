@@ -123,8 +123,8 @@ class TwitterUtils extends CComponent {
 			if($user_id != null) {
 				$user = User::model()->find('user_id=:user_id', array(':user_id'=>$user_id));
 				if($user != null) {
-					$accessToken = $user->access_token;
-					$accessTokenSecret = $user->access_token_secret;
+					$accessToken = $user->auth_token;
+					$accessTokenSecret = $user->auth_token_secret;
 				}
 			}
 		}
