@@ -100,23 +100,73 @@ class SiteController extends Controller
 	/**
 	 * This is the action to display the EditContact form
 	 */
-	public function actionEdit() {
+	public function actionEdit($contact_id) {
+		$user_id = $this->requireActiveUser();
+		if($user_id == null) {
+			return;
+		}
+		
+		// Find the contact that matches the contact id AND is owned by the current user
+		$contact = Contact::model()->find('contact_id=:contact_id AND owner_id=:owner_id', array(
+				':contact_id'=>$contact_id,
+				':owner_id'=>$user_id
+		));
+
+		if($contact == null) {
+			$this->redirect(array('/site/dashboard'));
+			return;
+		}
+
+		$model=new ContactForm;
+		if(isset($_POST['ContactForm'])) {
+				
+			$model->attributes=$_POST['ContactForm'];
+				
+			if($model->validate()) {
+				$contact->name = $_POST['ContactForm']['name'];
+				$contact->phone = $_POST['ContactForm']['phone'];
+				$contact->twitter = $_POST['ContactForm']['twitter'];
+				$contact->save();
+		
+				$this->redirect(array('/site/dashboard'));
+			}
+		}
 
 		$this->pageTitle="Edit Contact";
 		
-		$model=new ContactForm;
-		$this->render('add', array('model' => $model));
+		$model->name = $contact->name;
+		$model->phone = $contact->phone;
+		$model->twitter = $contact->twitter;
+		
+		$this->render('edit', array('model' => $model, 'contact_id' => $contact_id));
+	}
+	
+	public function actionDelete($contact_id) {
+		$user_id = $this->requireActiveUser();
+		if($user_id == null) {
+			return;
+		}
+		
+		// Find the contact that matches the contact id AND is owned by the current user
+		$contact = Contact::model()->find('contact_id=:contact_id AND owner_id=:owner_id', array(
+				':contact_id'=>$contact_id,
+				':owner_id'=>$user_id
+		));
+		
+		if($contact != null) {
+			$contact->delete();
+		}
+
+		$this->redirect(array('/site/dashboard'));
 	}
 	
 	/**
 	 * This is the action to display a contact's extended details
 	 */
 	public function actionView($contact_id) {
-		$user_id = ActiveUser::getActiveUser();
-		// If no active user exists, redirect to index
+		$user_id = $this->requireActiveUser();
 		if($user_id == null) {
-			$this->redirect(array('/site/index'));
-			return null;
+			return;
 		}
 		
 		// Find the contact that matches the contact id AND is owned by the current user

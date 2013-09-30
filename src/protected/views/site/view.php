@@ -9,16 +9,20 @@ $this->pageTitle=$contact->name;
 <?php 
 if(!empty($contact->phone)) {
 ?>
-<p><strong><?php echo $contact->phone; ?></strong></p>
+<p><strong>Phone:</strong> <?php echo $contact->phone; ?></p>
 <?php 
 }
 
 if(!empty($contact->twitter)) {
 ?>
 <p>
-<?php echo CHtml::link('@'.$contact->twitter, 'https://twitter.com/'.$contact->twitter)?> 
+<?php echo CHtml::link('@'.$contact->twitter, 'https://twitter.com/'.$contact->twitter, array('target' => '_blank'))?> 
 <?php 
 if($followerCount != null) {
+	if($followerCount == 5000) {
+		$followerCount = '5000+';
+	}
+
 	echo '('.$followerCount.' Followers)';
 }
 ?>
@@ -26,4 +30,4 @@ if($followerCount != null) {
 <?php 
 }
 ?>
-<p class="text-right"><?php echo CHtml::link('Edit Contact', array('/site/edit'), array('class' => 'btn btn-lg btn-default')); ?></p>
+<p class="text-right"><?php echo CHtml::link('Edit Contact', array('/site/edit', 'contact_id' => $contact->contact_id), array('class' => 'btn btn-lg btn-default')); ?></p>

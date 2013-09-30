@@ -5,7 +5,7 @@
 $this->pageTitle="Contact List";
 ?>
 <div class="text-center">
-	<p class="text-center"><?php echo CHtml::link('New Contact', array('/site/add'), array('class' => 'btn btn-lg btn-default')); ?></p>
+	<p class="text-center"><?php echo CHtml::link('New Contact', array('/site/add'), array('class' => 'btn btn-lg btn-primary')); ?></p>
 	<?php
 	foreach($contacts as $curContact) {
 		?>
