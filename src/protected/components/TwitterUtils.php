@@ -3,31 +3,23 @@ require_once('twitteroauth.php');
 require_once('CacheManager.php');
 require_once('UserSessionManager.php');
 
+/**
+ * This class wraps all communications with the Twitter API.
+ * @author tobyjsullivan
+ *
+ */
 class TwitterUtils extends CComponent {
-	
-	/**
-	 * A simple helper method to help with the repetative task of building the oauth object
-	 * @param string $auth_token
-	 * @param string $auth_token_secret
-	 */
-	private static function buildTwitterOAuth($auth_token = NULL, $auth_token_secret = NULL) {
-		$consumer_key = Yii::app()->params['twitterConsumerKey'];
-		$consumer_secret = Yii::app()->params['twitterConsumerSecret'];
-		
-		return new TwitterOAuth($consumer_key, $consumer_secret, $auth_token, $auth_token_secret);
-	}
-	
 	/**
 	 * This method produces a Twitter API URL that we can redirect users to for sign in.
 	 * @return string
 	 */
 	public static function getSignInUrl() {
-		$callbackUrl = 'http://contacts.tobysullivan.net/index.php?r=auth/callback';
-		
 		// Initialise the OAuth object
-		$conn = self::buildTwitterOAuth();
+		$conn = self::buildTwitterConnection();
 		
-		// Get temporary credentials for authorisation
+		// Get temporary credentials for authorisation. 
+		// The callback URL is actually ignored by the 1.1 version of the Twitter API.
+		$callbackUrl = 'http://contacts.tobysullivan.net/index.php?r=auth/callback';
 		$temp_creds = $conn->getRequestToken($callbackUrl);
 
 		// Store temp credentials for use in callback
@@ -41,23 +33,27 @@ class TwitterUtils extends CComponent {
 	}
 	
 	/**
-	 * This method is to be run after the twitter callback
+	 * This method is to be run after the twitter callback. It will only work with the tokens saved in the session in getSignInUrl()
+	 * @return array Returns the credential array or false if the credentails can't be obtained.
 	 */
 	public static function getLongTermCredentials() {
+		// A lack of token data in the session is an odd error state
+		// The oauth_verifier will not be present in the request if the user opts to not grant permission (and probably in other expected cases)
 		if(!isset(Yii::app()->session['oauth_token']) || !isset(Yii::app()->session['oauth_token_secret']) ||
 				!isset($_REQUEST['oauth_verifier'])) {
-			return null;
+			return false;
 		}
 		
 		// Read temp credentials that were set previously in getSignInUrl()
 		$temp_auth_token = Yii::app()->session['oauth_token'];
 		$temp_auth_token_secret = Yii::app()->session['oauth_token_secret'];
 		
-		$temp_conn = self::buildTwitterOAuth($temp_auth_token, $temp_auth_token_secret);
+		$temp_conn = self::buildTwitterConnection($temp_auth_token, $temp_auth_token_secret);
 		
+		// Hit the twitter API to swap our verifier code for persistent, long-term credentials
 		$token_creds = $temp_conn->getAccessToken($_REQUEST['oauth_verifier']);
 		
-		// Return the token credential array
+		// Return the token credential array directly
 		return $token_creds;
 	}
 	
@@ -66,7 +62,7 @@ class TwitterUtils extends CComponent {
 	 * @param string $auth_token
 	 * @param string $auth_token_secret
 	 * @param string $force_check This flag is used to bypass caching and hit the Twitter API every time
-	 * @return boolean
+	 * @return Int The twitter user id for the account associated with the credentials or false if the credentials are invalid.
 	 */
 	public static function validateToken($auth_token, $auth_token_secret, $force_check = false) {
 		if(empty($auth_token) || empty($auth_token_secret)) {
@@ -81,8 +77,9 @@ class TwitterUtils extends CComponent {
 		}
 		
 		
-		$conn = self::buildTwitterOAuth($auth_token, $auth_token_secret);
+		$conn = self::buildTwitterConnection($auth_token, $auth_token_secret);
 		
+		// Attempt to retreive account details from the twitter API
 		$account = $conn->get('account/verify_credentials');
 		
 		if(isset($account->error) || isset($account->errors)) {
@@ -102,7 +99,7 @@ class TwitterUtils extends CComponent {
 	 * @return number
 	 */
 	public static function getFollowerCount($twitterHandle) {
-		// Standardise casing so we don't end up re-working for different casing.
+		// Standardise casing so we don't end up re-working unnecessarily
 		$twitterHandle = strtolower($twitterHandle);
 		
 		$cacheKey = "follower_count:".$twitterHandle;
@@ -112,28 +109,28 @@ class TwitterUtils extends CComponent {
 			}
 		}
 		
-		// User access tokens
-		// Defaults for debug mode
-		$accessToken = '93370723-3MlkNH3ChTxzf9U6wTDADcAO3sgtcgiObbEKhThg4';
-		$accessTokenSecret = 'kaoX8S03GVwqNRLmH0YVzJE5gc1DMo3XPU1Tn4J1o';
-		
-		// Load from user data
-		if(!YII_DEBUG) {
-			$user_id = UserSessionManager::getCurrentUserId();
-			if($user_id != null) {
-				$user = User::model()->find('user_id=:user_id', array(':user_id'=>$user_id));
-				if($user != null) {
-					$accessToken = $user->auth_token;
-					$accessTokenSecret = $user->auth_token_secret;
-				}
-			}
+		$user_id = UserSessionManager::getCurrentUserId();
+		if(!$user_id) {
+			return 0;
 		}
+			
+		$user = User::model()->find('user_id=:user_id', array(':user_id'=>$user_id));
+		if($user == null) {
+			return 0;
+		}
+			
+		$accessToken = $user->auth_token;
+		$accessTokenSecret = $user->auth_token_secret;
 		
-		$conn = self::buildTwitterOAuth($accessToken, $accessTokenSecret);
+		$conn = self::buildTwitterConnection($accessToken, $accessTokenSecret);
 		
+		// Hit the twitter API for a list of follower ids. Unfortunately, there's no method for just getting the count directly.
 		$followers = $conn->get('followers/ids', array('screen_name' => $twitterHandle));
 		
 		if(isset($followers->error) || isset($followers->errors)) {
+			// In event of error, we don't want to return immediately because we still want this in the cache.
+			// It is more likely the error is caused by a bad twitter handle than something more temporary list
+			// bad tokens so this is acceptable.
 			$count = 0;
 		} else {
 			$count = count($followers->ids);
@@ -143,5 +140,17 @@ class TwitterUtils extends CComponent {
 		CacheManager::getInstance()->set($cacheKey, $count, 60 * 60 * 24);
 		
 		return $count;
+	}
+	
+	/**
+	 * A simple helper method to help with the repetative task of building the oauth object
+	 * @param string $auth_token
+	 * @param string $auth_token_secret
+	 */
+	private static function buildTwitterConnection($auth_token = NULL, $auth_token_secret = NULL) {
+		$consumer_key = Yii::app()->params['twitterConsumerKey'];
+		$consumer_secret = Yii::app()->params['twitterConsumerSecret'];
+		
+		return new TwitterOAuth($consumer_key, $consumer_secret, $auth_token, $auth_token_secret);
 	}
 }

@@ -1,14 +1,19 @@
 <?php
 /**
- * This class manages user sessions and related security.
- *
+ * This class manages active user sessions and related security. Any user can have
+ * several sessions on multiple devices.
+ * 
+ * A primary concern of this class is keeping our database table of user sessions and the
+ * user's cookies in sync. We always err on the side of caution and destroy any sessions
+ * that don't look right.
  */
 class UserSessionManager extends CComponent {
 	const COOKIE_ACTIVE_USER = "active_user";
 	const COOKIE_SESSION_TOKEN = "session_token";
 	const COOKIE_SESSION_NONCE = "session_nonce";
 	
-	// The dirty flag lets us know if cookies have been set recently (and so cannot be read directly)
+	// The dirty flag lets us know if cookies have been set recently. This is important
+	// because we can't read recently written cookies until after the user's browser reloads.
 	private static $dirty = false;
 	private static $last_data = null;
 	
@@ -43,6 +48,9 @@ class UserSessionManager extends CComponent {
 		}
 	}
 	
+	/**
+	 * This method will search the user's cookies for an active session and, if found, will destroy that session.
+	 */
 	public static function destroyCurrentSession() {
 		$token = self::$dirty ? self::$last_data['token'] : self::getCookie(self::COOKIE_SESSION_TOKEN);
 		
@@ -58,13 +66,14 @@ class UserSessionManager extends CComponent {
 	/**
 	 * This method checks for the existance of an active user session cookie, then validates any found 
 	 * before returning the associated user id.
+	 * @return The id of the user associated with the active session or false if there is no valid session.
 	 */
 	public static function getCurrentUserId() {
 		$user_id = self::$dirty ? self::$last_data['user_id'] : self::getCookie(self::COOKIE_ACTIVE_USER);
 
 		if($user_id == null) {
 			// No active session
-			return null;
+			return false;
 		}
 		
 		$token = self::$dirty ? self::$last_data['token'] : self::getCookie(self::COOKIE_SESSION_TOKEN);
@@ -72,7 +81,7 @@ class UserSessionManager extends CComponent {
 		if($token == null) {
 			// Error case: there was a user_id but no token. Possible tampering.
 			self::clearAllSessionCookies();
-			return null;
+			return false;
 		}
 		
 		// Search the cache for session nonce before hitting the DB
@@ -84,12 +93,12 @@ class UserSessionManager extends CComponent {
 			if($session == null) {
 				// No matching session in DB. Invalid.
 				self::clearAllSessionCookies();
-				return null;
+				return false;
 			} else if(CDateTimeParser::parse($session->expires,'yyyy-MM-dd hh:mm:ss') < time()) {
 				// Session has expired and therefor invalid. Clean it up.
 				$session->delete();
 				self::clearAllSessionCookies();
-				return null;
+				return false;
 			}
 			$local_nonce = $session->nonce;
 		}
@@ -100,11 +109,11 @@ class UserSessionManager extends CComponent {
 		if($read_nonce == null) {
 			// No nonce? No go
 			self::destroySession($token);
-			return null;
+			return false;
 		} else if ($read_nonce != $local_nonce) {
 			// Nonce doesn't match expected indicates clear case of tampering (specifically, copied cookies on multiple devices)
 			self::destroySession($token);
-			return null;
+			return false;
 		}
 		
 		// Everything looks good! Update the nonce and return the user ID
@@ -121,7 +130,7 @@ class UserSessionManager extends CComponent {
 	 */
 	public static function validSessionExists() {
 		$user_id = self::getCurrentUserId();
-		if($user_id == null) {
+		if(!$user_id) {
 			return false;
 		}
 	}

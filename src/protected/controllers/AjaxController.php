@@ -3,9 +3,10 @@ class AjaxController extends Controller {
 	public $layout = 'ajax';
 	
 	public function actionGetFollowerCount($twitter_handle) {
-		$user_id = $this->requireActiveUser();
-		if($user_id == null) {
-			return;
+		$user_id = UserSessionManager::getCurrentUserId();
+		// If no active user exists, throw an authorisation error
+		if(!$user_id) {
+			throw new CHttpException(401,'UNAUTHORIZED');
 		}
 		
 		$followerCount = TwitterUtils::getFollowerCount($twitter_handle);
@@ -13,17 +14,13 @@ class AjaxController extends Controller {
 	}
 
 	/**
-	 * This method handles fetching the active user id or redirecting to the
-	 * index page if one is not set.
+	 * This is the action to handle external exceptions.
 	 */
-	protected function requireActiveUser() {
-		$user_id = UserSessionManager::getCurrentUserId();
-		// If no active user exists, redirect to index
-		if($user_id == null) {
-			$this->redirect(array('/site/index'));
-			return null;
+	public function actionError()
+	{
+		if($error=Yii::app()->errorHandler->error)
+		{
+			$this->render('error', $error);
 		}
-	
-		return $user_id;
 	}
 }

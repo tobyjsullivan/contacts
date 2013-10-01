@@ -32,7 +32,7 @@ class SiteController extends Controller
 	{
 		// Redirect the user to their dashboard if they are already signed in
 		$user_id = UserSessionManager::getCurrentUserId();
-		if($user_id != null) {
+		if($user_id) {
 			$this->redirect(array('/site/dashboard'));
 		}
 		
@@ -46,7 +46,7 @@ class SiteController extends Controller
 	 */
 	public function actionDashboard() {
 		$user_id = $this->requireActiveUser();
-		if($user_id == null) {
+		if(!$user_id) {
 			return;
 		}
 		
@@ -62,9 +62,9 @@ class SiteController extends Controller
 	protected function requireActiveUser() {
 		$user_id = UserSessionManager::getCurrentUserId();
 		// If no active user exists, redirect to index
-		if($user_id == null) {
+		if(!$user_id) {
 			$this->redirect(array('/site/index'));
-			return null;
+			return false;
 		}
 		
 		return $user_id;
@@ -81,7 +81,7 @@ class SiteController extends Controller
 			
 			if($model->validate()) {
 				$user_id = $this->requireActiveUser();
-				if($user_id == null) {
+				if(!$user_id) {
 					return;
 				}
 			
@@ -107,7 +107,7 @@ class SiteController extends Controller
 	 */
 	public function actionEdit($contact_id) {
 		$user_id = $this->requireActiveUser();
-		if($user_id == null) {
+		if(!$user_id) {
 			return;
 		}
 		
@@ -148,7 +148,7 @@ class SiteController extends Controller
 	
 	public function actionDelete($contact_id) {
 		$user_id = $this->requireActiveUser();
-		if($user_id == null) {
+		if(!$user_id) {
 			return;
 		}
 		

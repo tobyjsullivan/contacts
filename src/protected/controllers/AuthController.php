@@ -26,7 +26,7 @@ class AuthController extends Controller {
 		$token_creds = TwitterUtils::getLongTermCredentials();
 		
 		// In the event the user cancels, etc.
-		if($token_creds == null) {
+		if(!$token_creds) {
 			$this->redirect(array('/site/index'));
 		}
 		

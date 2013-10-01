@@ -1,5 +1,7 @@
 <?php
-// vim: foldmethod=marker
+/**
+ * Taken from https://github.com/abraham/twitteroauth with minor differences to play nice with the Yii framework.
+ */
 
 /* Generic exception class
  */
