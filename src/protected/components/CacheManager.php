@@ -24,4 +24,8 @@ class CacheManager {
 	public function get($key) {
 		return $this->memcache->get($key);
 	}
+	
+	public function delete($key) {
+		$this->memcache->delete($key);
+	}
 }
