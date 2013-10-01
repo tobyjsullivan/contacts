@@ -4,6 +4,11 @@ html, body {
 	/* font-size: 24px; */
 }
 
+/* Hack to fix a display issue with bootstrap modals */
+body.modal-open {
+	margin-right: 0px;
+}
+
 .header-wrapper {
 	background-color: #d7d7d7;
 	margin-bottom: 10px;
