@@ -43,3 +43,7 @@ The unit tests are easiest run with the vagrant box. Simply ensure you have vagr
 	./unittest
 	
 This script will kick up the vagrant box and then execute the unit tests.
+
+Additionally, the unittest script supports passing arguments into phpunit. Of particular helpfulness is the verbose flag:
+
+	./unittest -v
