@@ -50,7 +50,13 @@ class SiteController extends Controller
 			return;
 		}
 		
-		$contacts = Contact::model()->findAll('owner_id=:owner_id', array(':owner_id'=>$user_id));
+		// Get all the users contacts, sorted alphabetically
+		$criteria = array(
+				'order'=>'name', 
+				'condition'=>'owner_id=:owner_id', 
+				'params'=>array(':owner_id'=>$user_id)
+				);
+		$contacts = Contact::model()->findAll($criteria);
 		
 		$this->render('dashboard', array('contacts'=>$contacts));
 	}
