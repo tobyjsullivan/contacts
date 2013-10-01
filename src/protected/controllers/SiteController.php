@@ -133,7 +133,7 @@ class SiteController extends Controller
 				$contact->twitter = trim($_POST['ContactForm']['twitter'], "@");
 				$contact->save();
 		
-				$this->redirect(array('/site/view', 'contact_id'=>$contact_id));
+				$this->redirect(array('/site/dashboard', 'contact_id'=>$contact_id));
 			}
 		}
 
@@ -163,33 +163,6 @@ class SiteController extends Controller
 		}
 
 		$this->redirect(array('/site/dashboard'));
-	}
-	
-	/**
-	 * This is the action to display a contact's extended details
-	 */
-	public function actionView($contact_id) {
-		$user_id = $this->requireActiveUser();
-		if($user_id == null) {
-			return;
-		}
-		
-		// Find the contact that matches the contact id AND is owned by the current user
-		$contact = Contact::model()->find('contact_id=:contact_id AND owner_id=:owner_id', array(
-				':contact_id'=>$contact_id,
-				':owner_id'=>$user_id
-				));
-		
-		if($contact == null) {
-			$this->redirect(array('/site/dashboard'));
-		}
-		
-		$followerCount = null;
-		if(!empty($contact->twitter)) {
-			$followerCount = TwitterUtils::getFollowerCount($contact->twitter);
-		}
-		
-		$this->render('view', array('contact'=>$contact, 'followerCount'=>$followerCount));
 	}
 
 	/**

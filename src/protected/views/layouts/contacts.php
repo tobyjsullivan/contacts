@@ -3,6 +3,9 @@
 <html lang="en">
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+    	<script src="<?php echo Yii::app()->params['assetHost']; ?>/js/jquery-1.10.2.min.js"></script>
+    	<script src="<?php echo Yii::app()->params['assetHost']; ?>/js/bootstrap.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->params['assetHost']; ?>/css/bootstrap.min.css" />
 		<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->params['assetHost']; ?>/css/contacts.css" />
 		<title><?php echo CHtml::encode($this->pageTitle); ?></title>
