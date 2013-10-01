@@ -50,11 +50,11 @@ Additionally, the unittest script supports passing arguments into phpunit. Of pa
 
 Code Description
 ---
-Here's a quick breakdown of the application directory structure
+Here's a quick breakdown of the top-level of the application directory structure.
 
 	sql            # Basic database schema definition
 	src            # Application source
-	 |-- assets    # A container for "arbitrary" assets provided by the framework. Not used. To be removed.
+	 |-- assets    # A container for "arbitrary" assets provided by the framework. Not used presently.
 	 |-- css
 	 |-- fonts
 	 |-- images
