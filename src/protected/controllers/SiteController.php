@@ -30,6 +30,11 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
+		// Redirect the user to their dashboard if they are already signed in
+		$user_id = UserSessionManager::getCurrentUserId();
+		if($user_id != null) {
+			$this->redirect(array('/site/dashboard'));
+		}
 		
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
