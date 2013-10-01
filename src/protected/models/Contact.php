@@ -1,4 +1,8 @@
 <?php
+/**
+ * This model represents users' contact data stored in the tbl_contacts table
+ *
+ */
 class Contact extends CActiveRecord
 {
 	public static function model($className=__CLASS__)
@@ -9,13 +13,5 @@ class Contact extends CActiveRecord
 	public function tableName()
 	{
 		return 'tbl_contacts';
-	}
-	
-	public function getFollowerCount() {
-		if(empty($this->twitter)) {
-			return null;
-		}
-		
-		return TwitterUtils::getFollowerCount($this->twitter);
 	}
 }
