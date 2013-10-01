@@ -10,7 +10,7 @@ $this->pageTitle="Contact List";
 	foreach($contacts as $curContact) {
 		?>
 	<div class="contact">
-		<p><?php echo CHtml::link($curContact->name, array('/site/view','contact_id'=>$curContact->contact_id)); ?></p>
+		<p><?php echo CHtml::link(CHtml::encode($curContact->name), array('/site/view','contact_id'=>$curContact->contact_id)); ?></p>
 	</div>
 		<?php
 	}

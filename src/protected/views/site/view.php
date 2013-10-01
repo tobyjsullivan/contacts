@@ -9,14 +9,14 @@ $this->pageTitle=$contact->name;
 <?php 
 if(!empty($contact->phone)) {
 ?>
-<p><strong>Phone:</strong> <?php echo $contact->phone; ?></p>
+<p><strong>Phone:</strong> <?php echo CHtml::encode($contact->phone); ?></p>
 <?php 
 }
 
 if(!empty($contact->twitter)) {
 ?>
 <p>
-<?php echo CHtml::link('@'.$contact->twitter, 'https://twitter.com/'.$contact->twitter, array('target' => '_blank'))?> 
+<?php echo CHtml::link('@'.CHtml::encode($contact->twitter), 'https://twitter.com/'.CHtml::encode($contact->twitter), array('target' => '_blank'))?> 
 <?php 
 if($followerCount != null) {
 	if($followerCount == 5000) {
