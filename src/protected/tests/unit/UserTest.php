@@ -77,6 +77,11 @@ class UserTest extends CDbTestCase {
 	 * This method tests the validation of valid twitter credentials
 	 */
 	public function testValidateTwitterToken_Valid() {
+		if(empty(Yii::app()->params['twitterConsumerKey'])) {
+			$this->markTestSkipped('Twitter API Key is not configured.');
+			return;
+		}
+		
 		// If this test fails, ensure the sample user has valid tokens (defined in fixture).
 		$user = $this->users('sample3');
 		

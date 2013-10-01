@@ -1,6 +1,11 @@
 <?php
 class TwitterUtilsTest extends CTestCase {
 	public function testGetSignInUrl() {
+		if(empty(Yii::app()->params['twitterConsumerKey'])) {
+			$this->markTestSkipped('Twitter API Key is not configured.');
+			return;
+		}
+		
 		$url = TwitterUtils::getSignInUrl();
 		
 		$this->assertNotNull($url);
@@ -17,6 +22,11 @@ class TwitterUtilsTest extends CTestCase {
 	}
 	
 	public function testGetFollowerCount() {
+		if(empty(Yii::app()->params['twitterConsumerKey'])) {
+			$this->markTestSkipped('Twitter API Key is not configured.');
+			return;
+		}
+		
 		$twitter_handle = "TestUse57789104";
 		$expected_result = 2;
 		
