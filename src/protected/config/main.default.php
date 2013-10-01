@@ -91,5 +91,6 @@ return array(
 		// Twitter authentication
 		'twitterConsumerKey'=>'',
 		'twitterConsumerSecret'=>'',
+		'assetHost'=>'',
 	),
 );
