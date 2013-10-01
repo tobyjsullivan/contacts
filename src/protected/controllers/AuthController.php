@@ -45,7 +45,7 @@ class AuthController extends Controller {
 		$user->auth_token_secret = $token_creds['oauth_token_secret'];
 		$user->save();
 		
-		ActiveUser::setActiveUser($user->user_id);
+		UserSessionManager::initSession($user->user_id);
 		
 		$this->redirect(array('/site/dashboard'));
 	}
@@ -63,13 +63,13 @@ class AuthController extends Controller {
 		$user->auth_token_secret = $auth_token_secret;
 		$user->save();
 		
-		ActiveUser::setActiveUser($user->user_id);
+		UserSessionManager::initSession($user->user_id);
 		
 		$this->redirect(array('/site/dashboard'));
 	}
 	
 	public function actionSignOut() {
-		ActiveUser::clearActiveUser();
+		UserSessionManager::destroyCurrentSession();
 		
 		$this->redirect(array('/site/index'));
 	}

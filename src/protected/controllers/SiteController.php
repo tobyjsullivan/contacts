@@ -55,7 +55,7 @@ class SiteController extends Controller
 	 * index page if one is not set.
 	 */
 	private function requireActiveUser() {
-		$user_id = ActiveUser::getActiveUser();
+		$user_id = UserSessionManager::getCurrentUserId();
 		// If no active user exists, redirect to index
 		if($user_id == null) {
 			$this->redirect(array('/site/index'));

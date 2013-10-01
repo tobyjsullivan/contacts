@@ -1,7 +1,7 @@
 <?php
 require_once('twitteroauth.php');
 require_once('CacheManager.php');
-require_once('ActiveUser.php');
+require_once('UserSessionManager.php');
 
 class TwitterUtils extends CComponent {
 	
@@ -119,7 +119,7 @@ class TwitterUtils extends CComponent {
 		
 		// Load from user data
 		if(!YII_DEBUG) {
-			$user_id = ActiveUser::getActiveUser();
+			$user_id = UserSessionManager::getCurrentUserId();
 			if($user_id != null) {
 				$user = User::model()->find('user_id=:user_id', array(':user_id'=>$user_id));
 				if($user != null) {

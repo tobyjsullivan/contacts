@@ -16,3 +16,13 @@ CREATE TABLE IF NOT EXISTS `tbl_contacts` (
 	PRIMARY KEY (`contact_id`),
 	KEY (`owner_id`)
 );
+
+CREATE TABLE IF NOT EXISTS `tbl_sessions` (
+	`session_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`user_id` INT UNSIGNED NOT NULL,
+	`token` VARCHAR(32) NOT NULL,
+	`nonce` VARCHAR(32) NOT NULL,
+	`expires` DATETIME NOT NULL,
+	PRIMARY KEY (`session_id`),
+	KEY (`user_id`, `token`)
+);
