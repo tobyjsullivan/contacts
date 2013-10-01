@@ -1,10 +1,10 @@
 Contacts
 ===
-An address book for busy tweeps.
+An address book for busy tweeps. Built on the Yii framework.
 
 Quick Eval
 ---
-If all goes well, you should be able to get a copy up and running in a few commands
+If all goes well, you should be able to get a copy up and running with just a few commands.
 
 	git clone https://github.com/tobyjsullivan/contacts.git --recursive
 	cd contacts
