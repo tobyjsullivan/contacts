@@ -9,7 +9,7 @@ If all goes well, you should be able to get a copy up and running in a few comma
 	git clone https://github.com/tobyjsullivan/contacts.git --recursive
 	cd contacts
 	./set-config-default.sh
-	./unittest
+	./unittest # Yeah, the vagrant up step takes forever
 	curl 192.168.33.11
 	
 Hopefully that goes smoothly.
