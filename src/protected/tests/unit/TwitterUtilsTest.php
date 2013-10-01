@@ -13,6 +13,11 @@ class TwitterUtilsTest extends CTestCase {
 	}
 
 	public function testValidateToken_Invalid() {
+		if(empty(Yii::app()->params['twitterConsumerKey'])) {
+			$this->markTestSkipped('Twitter API Key is not configured.');
+			return;
+		}
+		
 		$auth_token = "Gibberish";
 		$auth_token_secret = "BadSecret";
 
@@ -36,6 +41,11 @@ class TwitterUtilsTest extends CTestCase {
 	}
 
 	public function testGetFollowerCountForBadHandle() {
+		if(empty(Yii::app()->params['twitterConsumerKey'])) {
+			$this->markTestSkipped('Twitter API Key is not configured.');
+			return;
+		}
+		
 		$twitter_handle = "thishandleiswaytoolongrightguys";
 
 		$retVal = TwitterUtils::getFollowerCount($twitter_handle);
@@ -44,11 +54,16 @@ class TwitterUtilsTest extends CTestCase {
 	}
 
 	public function testGetFollowerCountForProtected() {
-		$twitter_handle = "TestUse26541783";
+		if(empty(Yii::app()->params['twitterConsumerKey'])) {
+			$this->markTestSkipped('Twitter API Key is not configured.');
+			return;
+		}
+		
+		$twitter_handle = "1forthemoney";
 
 		$retVal = TwitterUtils::getFollowerCount($twitter_handle);
 
-		$this->assertEquals(0, $retVal);
+		$this->assertEquals(5, $retVal);
 	}
 
 }
