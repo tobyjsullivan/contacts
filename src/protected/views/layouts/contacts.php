@@ -61,6 +61,7 @@
 			</footer>
 		</div>
 		
+		<!-- We put this script at the end to help aid page load time -->
     	<script src="<?php echo Yii::app()->params['assetHost']; ?>/js/bootstrap.min.js"></script>
 	</body>
 </html>

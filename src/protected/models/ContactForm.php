@@ -1,7 +1,8 @@
 <?php
 /**
  * ContactForm class.
- * ContactForm is a container for managing contact form data. It is used in 'Add Contact' and 'Edit Contact'.
+ * ContactForm is a container for managing contact form data. It is used in 'Add Contact' and 'Edit Contact' 
+ * and handles input validation.
  *
  */
 class ContactForm extends CFormModel {
