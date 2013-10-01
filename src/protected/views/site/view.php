@@ -29,5 +29,11 @@ if($followerCount != null) {
 </p>
 <?php 
 }
+
+if(empty($contact->phone) && empty($contact->twitter)) {
+	?>
+	<p class="text-muted">You have no contact information for this person.</p>
+	<?php 
+}
 ?>
 <p class="text-right"><?php echo CHtml::link('Edit Contact', array('/site/edit', 'contact_id' => $contact->contact_id), array('class' => 'btn btn-lg btn-default')); ?></p>

@@ -128,7 +128,7 @@ class SiteController extends Controller
 				$contact->twitter = trim($_POST['ContactForm']['twitter'], "@");
 				$contact->save();
 		
-				$this->redirect(array('/site/dashboard'));
+				$this->redirect(array('/site/view', 'contact_id'=>$contact_id));
 			}
 		}
 
