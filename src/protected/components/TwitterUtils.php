@@ -101,7 +101,7 @@ class TwitterUtils extends CComponent {
 	public static function getFollowerCount($twitterHandle) {
 		// Standardise casing so we don't end up re-working unnecessarily
 		$twitterHandle = strtolower($twitterHandle);
-		
+
 		$cacheKey = "follower_count:".$twitterHandle;
 		if(!YII_DEBUG) {
 			if($count = CacheManager::getInstance()->get($cacheKey)) {
@@ -110,22 +110,27 @@ class TwitterUtils extends CComponent {
 		}
 		
 		$user_id = UserSessionManager::getCurrentUserId();
-		if(!$user_id) {
+		
+		if(YII_DEBUG && !$user_id) {
+			$accessToken = '93370723-3MlkNH3ChTxzf9U6wTDADcAO3sgtcgiObbEKhThg4';
+			$accessTokenSecret = 'kaoX8S03GVwqNRLmH0YVzJE5gc1DMo3XPU1Tn4J1o';
+		} else if(!$user_id) {
 			return 0;
-		}
+		} else {
 			
-		$user = User::model()->find('user_id=:user_id', array(':user_id'=>$user_id));
-		if($user == null) {
-			return 0;
-		}
+			$user = User::model()->find('user_id=:user_id', array(':user_id'=>$user_id));
+			if($user == null) {
+				return 0;
+			}
 			
-		$accessToken = $user->auth_token;
-		$accessTokenSecret = $user->auth_token_secret;
+			$accessToken = $user->auth_token;
+			$accessTokenSecret = $user->auth_token_secret;
+		}
 		
 		$conn = self::buildTwitterConnection($accessToken, $accessTokenSecret);
 		
-		// Hit the twitter API for a list of follower ids. Unfortunately, there's no method for just getting the count directly.
-		$followers = $conn->get('followers/ids', array('screen_name' => $twitterHandle));
+		// Hit the twitter API for the user's display details. These include the number of followers.
+		$followers = $conn->get('users/show', array('screen_name' => $twitterHandle));
 		
 		if(isset($followers->error) || isset($followers->errors)) {
 			// In event of error, we don't want to return immediately because we still want this in the cache.
@@ -133,7 +138,7 @@ class TwitterUtils extends CComponent {
 			// bad tokens so this is acceptable.
 			$count = 0;
 		} else {
-			$count = count($followers->ids);
+			$count = $followers->followers_count;
 		}
 		
 		// Cache data for 24 hours
