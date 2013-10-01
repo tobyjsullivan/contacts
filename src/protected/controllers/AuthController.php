@@ -1,4 +1,10 @@
 <?php
+/**
+ * This controller is responsible for handling authentication requests for starting
+ * and ending user sessions. It never actually produces output to the user directly, 
+ * it will redirect the user appropriately after authentication jobs complete.
+ *
+ */
 class AuthController extends Controller {
 	
 	/**

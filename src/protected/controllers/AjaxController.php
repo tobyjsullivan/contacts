@@ -1,7 +1,16 @@
 <?php
+/**
+ * This controller handles all ajax requests and json output
+ *
+ */
 class AjaxController extends Controller {
 	public $layout = 'ajax';
 	
+	/**
+	 * Our endpoint for getting follower counts
+	 * @param string $twitter_handle
+	 * @throws CHttpException This exception is thrown when the user is not signed in
+	 */
 	public function actionGetFollowerCount($twitter_handle) {
 		$user_id = UserSessionManager::getCurrentUserId();
 		// If no active user exists, throw an authorisation error

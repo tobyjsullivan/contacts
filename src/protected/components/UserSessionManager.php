@@ -6,6 +6,16 @@
  * A primary concern of this class is keeping our database table of user sessions and the
  * user's cookies in sync. We always err on the side of caution and destroy any sessions
  * that don't look right.
+ * 
+ * The basic design of our sessions is as follows:
+ * A new session is created each time a user signs in on a new device. 
+ * The session consists of an identifying pair of the user_id and a random token. 
+ * Additionally, the user's browser is assigned a nonce which we use for security.
+ * Each time the user's session is validated, we look up the appropriate session using
+ * the user_id and token stored in the browser's cookies. Then the current nonce is read 
+ * from the user's browser and compared to what is stored in our database. 
+ * If the nonce is valid, the session is concidered valid. 
+ * After each validation, the nonce is changed to a new random hash.
  */
 class UserSessionManager extends CComponent {
 	const COOKIE_ACTIVE_USER = "active_user";
