@@ -67,7 +67,7 @@ $this->pageTitle="Contact List";
 			  }).done(function(data) {
 			    $('<?php echo '#'.$followers_id; ?>').html('('+data.count+' followers)');
 			  }).fail(function(xhr, status, error) {
-				alert('Oops:' + error + '(status: ' + status + ')');
+			    $('<?php echo '#'.$followers_id; ?>').html('');
 			  });
 			});
 			</script>
