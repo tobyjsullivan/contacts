@@ -47,3 +47,20 @@ This script will kick up the vagrant box and then execute the unit tests.
 Additionally, the unittest script supports passing arguments into phpunit. Of particular helpfulness is the verbose flag:
 
 	./unittest -v
+
+Code Description
+---
+Here's a quick breakdown of the application directory structure
+
+	sql            # Basic database schema definition
+	src            # Application source
+	 |-- assets    # A container for "arbitrary" assets provided by the framework. Not used. To be removed.
+	 |-- css
+	 |-- fonts
+	 |-- images
+	 |-- js
+	 |-- lib       # This is for composer. However, composer is not actually used currently so this is just available for future needs.
+	 |-- protected # The meat of the project. All app-specific PHP code lives in here
+	 |-- themes    # Part of the Yii framework but not actively used
+	 \-- yii       # The actual Yii framework
+	vagrant        # For all your local dev environment needs
