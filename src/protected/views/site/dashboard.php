@@ -9,10 +9,11 @@ $this->pageTitle="Contact List";
 	<?php
 	foreach($contacts as $curContact) {
 		$modal_id = "myModal".$curContact->contact_id;
+
+		$followers_id = "followers".$curContact->contact_id;
 		?>
-	<div class="contact">
-		<!--  <p><?php echo CHtml::link(CHtml::encode($curContact->name), array('/site/view','contact_id'=>$curContact->contact_id)); ?></p> -->
-		<p><?php echo CHtml::link(CHtml::encode($curContact->name), '#'.$modal_id, array('data-toggle'=>'modal')); ?></p>
+	<div>
+		<p class="contact"><?php echo CHtml::link(CHtml::encode($curContact->name), '#'.$modal_id, array('data-toggle'=>'modal')); ?></p>
 		<!-- Modal -->
 		  <div class="modal fade" id="<?php echo $modal_id; ?>" tabindex="-1" role="dialog" aria-labelledby="<?php echo $modal_id."Label" ?>" aria-hidden="true">
 		    <div class="modal-dialog">
@@ -30,22 +31,12 @@ $this->pageTitle="Contact List";
 					}
 					
 					if(!empty($curContact->twitter)) {
-
-						$followerCount = TwitterUtils::getFollowerCount($curContact->twitter);
-					?>
-					<p>
-					<?php echo CHtml::link('@'.CHtml::encode($curContact->twitter), 'https://twitter.com/'.CHtml::encode($curContact->twitter), array('target' => '_blank'))?> 
-					<?php 
-					if($followerCount != null) {
-						if($followerCount == 5000) {
-							$followerCount = '5000+';
-						}
-					
-						echo '('.$followerCount.' Followers)';
-					}
-					?>
-					</p>
-					<?php 
+						?>
+						<p>
+						<?php echo CHtml::link('@'.CHtml::encode($curContact->twitter), 'https://twitter.com/'.CHtml::encode($curContact->twitter), array('target' => '_blank')) ?> 
+						<span id="<?php echo $followers_id; ?>">(Counting followers...)</span>
+						</p>
+						<?php 
 					}
 					
 					if(empty($curContact->phone) && empty($curContact->twitter)) {
@@ -65,6 +56,23 @@ $this->pageTitle="Contact List";
 		
 	</div>
 		<?php
+		if(!empty($curContact->twitter)) {
+			$url = $this->createUrl('/ajax/getFollowerCount', array('twitter_handle' => CHtml::encode($curContact->twitter)));
+			?>
+			<script language="javascript">
+			$('<?php echo '#'.$modal_id; ?>').on('show.bs.modal', function () {
+			  $.ajax({
+			    url: "<?php echo $url; ?>",
+				dataType: "json"
+			  }).done(function(data) {
+			    $('<?php echo '#'.$followers_id; ?>').html('('+data.count+' followers)');
+			  }).fail(function(xhr, status, error) {
+				alert('Oops:' + error + '(status: ' + status + ')');
+			  });
+			});
+			</script>
+			<?php
+		}
 	}
 	?>
 	

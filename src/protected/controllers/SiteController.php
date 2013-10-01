@@ -59,7 +59,7 @@ class SiteController extends Controller
 	 * This method handles fetching the active user id or redirecting to the
 	 * index page if one is not set.
 	 */
-	private function requireActiveUser() {
+	protected function requireActiveUser() {
 		$user_id = UserSessionManager::getCurrentUserId();
 		// If no active user exists, redirect to index
 		if($user_id == null) {
