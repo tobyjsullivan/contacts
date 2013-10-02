@@ -155,10 +155,14 @@ class UserSessionManager extends CComponent {
 		self::setCookie(self::COOKIE_SESSION_NONCE, $new_nonce);
 		self::setDirtyData($user_id, $token, $new_nonce);
 		
-		$session = UserSession::model()->find('user_id=:user_id AND token=:token', array(':user_id'=>$user_id, ':token'=>$token));
-		$session->nonce = $new_nonce;
-		$session->expires = new CDbExpression('NOW() + INTERVAL 30 DAY');
-		$session->save();
+		// Updating the nonce is the most common hit on the DB so we're bypassing the Active Record model
+		// and issuing the command directly
+		$sql = "UPDATE tbl_sessions SET nonce=:nonce, expires=(NOW() + INTERVAL 30 DAY) WHERE user_id=:user_id AND token=:token LIMIT 1";
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindParam(":nonce", $new_nonce, PDO::PARAM_STR);
+		$command->bindParam(":user_id", $user_id, PDO::PARAM_INT);
+		$command->bindParam(":token", $token, PDO::PARAM_STR);
+		$command->execute();
 		
 		return $new_nonce;
 	}
